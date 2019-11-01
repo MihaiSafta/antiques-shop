@@ -1,0 +1,8 @@
+server.port: 8081
+spring:
+  jpa:
+    hibernate.ddl-auto: update
+  datasource:
+    url: jdbc:mysql://localhost:3306/antiques_shop
+    username: antiques-shop-admin
+    password: antiques-shop-admin
