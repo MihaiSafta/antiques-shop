@@ -1,4 +1,7 @@
 package org.fasttrackit.antiquesshop;
+
+import org.fasttrackit.antiquesshop.persistance.ProductRepository;
+import org.fasttrackit.antiquesshop.transfer.product.UpdateProductRequest;
 import org.junit.Test;
 import org.fasttrackit.antiquesshop.domain.Product;
 import org.fasttrackit.antiquesshop.exception.ResourceNotFoundException;
@@ -21,23 +24,24 @@ import static org.hamcrest.Matchers.greaterThan;
 public class ProductServiceIntegrationTest {
     @Autowired
     private ProductService productService;
+
     @Test
-    public void testCreateProduct_whenValidRequest_thenReturnCreatedProduct(){
+    public void testCreateProduct_whenValidRequest_thenReturnCreatedProduct() {
 
         createProduct();
     }
 
 
-
     @Test(expected = TransactionSystemException.class)
-    public  void testCreateProduct_whenInvalidRequest_thenThrowException(){
+    public void testCreateProduct_whenInvalidRequest_thenThrowException() {
 
         CreateProductRequest request = new CreateProductRequest();
 
         productService.createProduct(request);
     }
+
     @Test
-    public void testGetProductById_whenExistingEntity_thenReturnProduct(){
+    public void testGetProductById_whenExistingEntity_thenReturnProduct() {
         Product createdProduct = createProduct();
         Product retrievedProduct = productService.getProduct(createdProduct.getId());
         assertThat(retrievedProduct, notNullValue());
@@ -45,13 +49,36 @@ public class ProductServiceIntegrationTest {
         assertThat(retrievedProduct.getName(), is(createdProduct.getName()));
 
     }
+
     @Test(expected = ResourceNotFoundException.class)
-    public void testGetProduct_whenNonExistingEntity_thenTrowNotFoundException(){
+    public void testGetProduct_whenNonExistingEntity_thenTrowNotFoundException() {
         productService.getProduct(9999);
     }
 
+    @Test
+    public void testUpdateProduct_whenValidRequest_thenReturnUpdatedProduct() {
+        Product createdProduct = createProduct();
+        UpdateProductRequest request = new UpdateProductRequest();
+        request.setName(createdProduct.getName() + "Updated");
+        request.setPrice(createdProduct.getPrice() + 10);
+        request.setQuantity(createdProduct.getQuantity() + 10);
+        Product updateProduct =
+                productService.updateProduct(createdProduct.getId(), request);
+        assertThat(updateProduct, notNullValue());
+        assertThat(updateProduct.getId(), is(createdProduct.getId()));
+        assertThat(updateProduct.getName(), is(request.getName()));
+        assertThat(updateProduct.getDescription(), is(request.getDescription()));
+        assertThat(updateProduct.getQuantity(), is(request.getQuantity()));
+        // have to rethink notnull!
+    }
 
+        @Test
+        public void testDeleteProduct_whenValidRequest() {
+        Product createdProduct = createProduct();
 
+            productService.deleteProduct(createdProduct.getId());
+
+        }
 
 
 
