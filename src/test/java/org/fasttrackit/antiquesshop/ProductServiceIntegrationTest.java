@@ -1,6 +1,5 @@
 package org.fasttrackit.antiquesshop;
 
-import org.fasttrackit.antiquesshop.persistance.ProductRepository;
 import org.fasttrackit.antiquesshop.transfer.product.UpdateProductRequest;
 import org.junit.Test;
 import org.fasttrackit.antiquesshop.domain.Product;
